@@ -1,9 +1,9 @@
 package insta.dom;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.OneToMany;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -13,18 +13,14 @@ public class Kayttaja extends AbstractPersistable<Long> {
     @NotBlank
     @Length(min = 4, max = 30)
     private String kayttajanimi;
-    
     @NotBlank
     @Length(min = 6)
     private String salasana;
+    @OneToMany(mappedBy = "kayttaja")
+    private List<Kuva> kuvat;
+    @OneToMany(mappedBy = "kayttaja")
+    private List<Kommentti> kommentit;
     
-    @NotBlank
-    private String kokoNimi;
-    
-    @NotBlank
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date syntymaAika;
-
     public String getKayttajanimi() {
         return kayttajanimi;
     }
@@ -41,19 +37,27 @@ public class Kayttaja extends AbstractPersistable<Long> {
         this.salasana = salasana;
     }
 
-    public String getKokoNimi() {
-        return kokoNimi;
+    public List<Kuva> getKuvat() {
+        if (this.kuvat == null) {
+            this.kuvat = new ArrayList<>();
+        }
+        
+        return this.kuvat;
     }
 
-    public void setKokoNimi(String kokoNimi) {
-        this.kokoNimi = kokoNimi;
+    public void setKuvat(List<Kuva> kuvat) {
+        this.kuvat = kuvat;
     }
 
-    public Date getSyntymaAika() {
-        return syntymaAika;
+    public List<Kommentti> getKommentit() {
+        if (this.kommentit == null) {
+            this.kommentit = new ArrayList<>();
+        }
+        
+        return this.kommentit;
     }
 
-    public void setSyntymaAika(Date syntymaAika) {
-        this.syntymaAika = syntymaAika;
+    public void setKommentit(List<Kommentti> kommentit) {
+        this.kommentit = kommentit;
     }
 }
