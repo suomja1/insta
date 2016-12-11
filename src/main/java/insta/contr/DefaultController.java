@@ -54,17 +54,11 @@ public class DefaultController {
     
     @RequestMapping(method = RequestMethod.GET)
     public String home(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String kayttajanimi = auth.getName();
+        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
         model.addAttribute("kayttajat", kayttajaRepository.findAllByOrderByKayttajanimi());
         model.addAttribute("tunnisteet", tunnisteRepository.findAllByOrderByNimi());
         return "index";
     }
-    
-//    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-//    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//        return "redirect:/login?logout";
-//    }
 }

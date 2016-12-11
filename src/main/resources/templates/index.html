@@ -5,7 +5,21 @@
         <title>insta</title>
     </head>
     <body>
-        <h1>insta</h1>
+        <header>
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <h1>insta</h1>
+                    </td>
+                    <td align="right">
+                        <a th:href="@{/user/{id}(id=${tkayttaja.id})}" th:text="${tkayttaja.kayttajanimi}">nimi</a>
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Kirjaudu ulos" />
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </header>
         
         <h2>Selaa kuvia&#8229;</h2>
         
@@ -27,9 +41,5 @@
                 </td>
             </tr>
         </table>
-        
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Kirjaudu ulos" />
-        </form>
     </body>
 </html>
