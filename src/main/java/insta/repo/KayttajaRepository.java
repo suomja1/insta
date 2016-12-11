@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface KayttajaRepository extends JpaRepository<Kayttaja, Long> {
     public List<Kayttaja> findAllByOrderByKayttajanimi();
+    public Kayttaja findByKayttajanimi(String nimi);
 }

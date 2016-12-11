@@ -15,8 +15,16 @@
                 <th>&#8229;tunnisteittain</th> 
             </tr>
             <tr>
-                <td>x</td>
-                <td>x</td> 
+                <td>
+                    <p th:each="kayttaja: ${kayttajat}">
+                        <a th:href="@{/user/{id}(id=${kayttaja.id})}" th:text="${kayttaja.kayttajanimi}">nimi</a>
+                    </p>
+                </td>
+                <td>
+                    <p th:each="tunniste: ${tunnisteet}">
+                        <a th:href="@{/tag/{id}(id=${tunniste.id})}" th:text="${tunniste.nimi}">nimi</a>
+                    </p>
+                </td>
             </tr>
         </table>
     </body>
