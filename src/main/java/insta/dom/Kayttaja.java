@@ -2,6 +2,7 @@ package insta.dom;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import org.hibernate.validator.constraints.Length;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class Kayttaja extends AbstractPersistable<Long> {
     @NotBlank
     @Length(min = 4, max = 30)
+    @Column(unique = true)
     private String kayttajanimi;
     @NotBlank
     @Length(min = 6)
