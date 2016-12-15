@@ -49,7 +49,12 @@ public class DefaultController {
         tunniste = tunnisteRepository.save(tunniste);
     }
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String welcome(Model model) {
+        return "welcome";
+    }
+    
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String kayttajanimi = auth.getName();
