@@ -9,7 +9,7 @@
             <table style="width:100%">
                 <tr>
                     <td>
-                        <h1>insta</h1>
+                        <h1><a href="/home">insta</a></h1>
                     </td>
                     <td align="right">
                         <a th:href="@{/user/{id}(id=${tkayttaja.id})}" th:text="${tkayttaja.kayttajanimi}">nimi</a>
@@ -50,6 +50,6 @@
             <input type="submit" value="Kommentoi!"/>
         </form>
         
-        <p align="right"><a th:href="@{~/home}">Takaisin</a></p>
+        <p align="right"><a href="javascript:javascript:history.go(-1)">Takaisin</a></p>
     </body>
 </html>
