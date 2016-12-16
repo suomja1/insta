@@ -20,12 +20,14 @@
                 </tr>
             </table>
         </header>
-        
+
         <h2 th:text="${tunniste} != null ? ${tunniste.nimi} : ${kayttaja.kayttajanimi}"></h2>
-        
+
         <th:block th:each="kuva : ${kuvat}">
-            <img th:src="@{kuva.sisalto}" />
-            <p th:text="${kuva.kuvateksti}">kuvateksti</p>
+            <figure>
+                <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="480"/>
+                <figcaption th:text="${kuva.kuvateksti}">kuvateksti</figcaption>
+            </figure>
         </th:block>
     </body>
 </html>

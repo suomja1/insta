@@ -3,6 +3,7 @@ package insta.contr;
 import insta.dom.Kayttaja;
 import insta.dom.Tunniste;
 import insta.repo.KayttajaRepository;
+import insta.repo.KuvaRepository;
 import insta.repo.TunnisteRepository;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class DefaultController {
     private KayttajaRepository kayttajaRepository;
     @Autowired
     private TunnisteRepository tunnisteRepository;
+    @Autowired
+    private KuvaRepository kuvaRepository;
     
     @PostConstruct
     public void init() {
@@ -61,6 +64,9 @@ public class DefaultController {
         model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
         model.addAttribute("kayttajat", kayttajaRepository.findAllByOrderByKayttajanimi());
         model.addAttribute("tunnisteet", tunnisteRepository.findAllByOrderByNimi());
+        
+        System.out.println(kuvaRepository.count());
+        
         return "index";
     }
 }

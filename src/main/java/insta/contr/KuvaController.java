@@ -51,11 +51,17 @@ public class KuvaController {
         return "pics";
     }
     
+    @RequestMapping(value = "pic/{id}/content", method = RequestMethod.GET, produces = "image/jpg")
+    @ResponseBody
+    public byte[] get(@PathVariable Long id) {
+        return kuvaRepository.findOne(id).getSisalto();
+    }
+    
     @RequestMapping(value = "/home", method = RequestMethod.POST)
     @Transactional
     public String lisaa(@RequestParam("kuva") MultipartFile file,
             @RequestParam(required=false) String kuvateksti) throws IOException {
-        if (file.getContentType().equals("image/jpg")) {
+        if (file.getContentType().contains("image")) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String kayttajanimi = auth.getName();
             Kayttaja kayttaja = kayttajaRepository.findByKayttajanimi(kayttajanimi);
