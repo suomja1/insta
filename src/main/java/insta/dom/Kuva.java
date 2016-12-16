@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 public class Kuva extends AbstractPersistable<Long> {
-    @Column(name = "Kuva")
+    @Column(name = "kuva")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] sisalto;
     private String kuvateksti;
