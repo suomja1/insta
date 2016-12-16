@@ -1,10 +1,15 @@
 language: java
-
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 sudo: false
 addons:
   apt:
     packages:
-      - oracle-java8-installer
+    - oracle-java8-installer
+deploy:
+  provider: heroku
+  api_key:
+    secure: KZuwC0Uialodd8b+GMngAId67PUCZM2XM5Qfbgqwtnb9rQQKhUkXBq5B4kcuaMNhGO8l+Lr+7UQuq7N/DyJEzrv5F7KLUJADIwqq5FYWhRhPrTHe0M3pdjHKN/8HLwUriZTJYOqLM0N14iWcEE2FP8DCEdDHxCAICt33wAWIT2BtRX1Szt4OVJTVFHn6dX4XjjCtLCp5l/t5lhBA2f4ZirYrjsf0HA6YXls5NHWmXxTMrPXSfaqUQCpQVVuPv2wineH/80g1UJyCwG3h4O5mkIRz2sPvrq0e4zCa24kteClZRiGZHJV/uq7nInnmYPBdkHZwFQOqVkM4EK+FO2SlJEIKULu3GjE3mOs1eXmUG3tmXcIhtxoKl20CyT82U2EH+yLcMVSxtEF4vty3V7tHOGL/B/WQSPdlO+FZQnouhNpoBKym+zrLPA/yrWsymZkTyBfZbmwKSYaQRW3XCIQDRIKcQEzDqBGs7I7WyR8WI50zKGbmiyb8KzmZftxuqwIXH1EPq5H4M3RBMWTc5Tv9ZW2pNa/tH8wXJE67RZDTdj1EA8yHCXhAlxTDUrxKLdgYc3Q7+DRT+8ewaD/nGFIrdb0bZmctPuuS+CF52hzdVh4e5CX98kNVM0hK76HfGA1sKMkvdXwJyelgx5Dn7h0KNxl4EdUoYd1gT8N58nffUYo=
+  app: evening-island-18993
+  on:
+    repo: suomja1/insta
