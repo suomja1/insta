@@ -47,9 +47,14 @@ public class DefaultController {
         Path polku = Paths.get("src/main/resources/public/P6101609.JPG");
         kuva.setSisalto(Files.readAllBytes(polku));
         kuva.setKuvateksti("Mmhmm...");
-        kuva.setKayttaja(kayttaja);
-        kayttaja = kayttajaRepository.save(kayttaja);
+        Tunniste tunniste = new Tunniste();
+        tunniste.setNimi("arvostelemunillallinen");
         kayttaja.getKuvat().add(kuva);
+        kuva.setKayttaja(kayttaja);
+        kuva.getTunnisteet().add(tunniste);
+        tunniste.getKuvat().add(kuva);
+        tunnisteRepository.save(tunniste);
+        kayttajaRepository.save(kayttaja);
         kuvaRepository.save(kuva);
         
         kayttaja = new Kayttaja();
@@ -59,18 +64,15 @@ public class DefaultController {
         polku = Paths.get("src/main/resources/public/P4100070.JPG");
         kuva.setSisalto(Files.readAllBytes(polku));
         kuva.setKuvateksti("Raidalla on pitkät viikset.");
-        kuva.setKayttaja(kayttaja);
-        kayttaja = kayttajaRepository.save(kayttaja);
-        kayttaja.getKuvat().add(kuva);
-        kuvaRepository.save(kuva);
-        
-        Tunniste tunniste = new Tunniste();
-        tunniste.setNimi("kissakuvat");
-        tunniste = tunnisteRepository.save(tunniste);
-        
         tunniste = new Tunniste();
-        tunniste.setNimi("arvostelemunillallinen");
-        tunniste = tunnisteRepository.save(tunniste);
+        tunniste.setNimi("kissakuvat");
+        kayttaja.getKuvat().add(kuva);
+        kuva.setKayttaja(kayttaja);
+        kuva.getTunnisteet().add(tunniste);
+        tunniste.getKuvat().add(kuva);
+        tunnisteRepository.save(tunniste);
+        kayttajaRepository.save(kayttaja);
+        kuvaRepository.save(kuva);
     }
     
     @RequestMapping(value = "", method = RequestMethod.GET)

@@ -21,13 +21,17 @@
             </table>
         </header>
 
-        <h2 th:text="${tunniste} != null ? ${tunniste.nimi} : ${kayttaja.kayttajanimi}"></h2>
+        <h2 th:text="${tunniste} != null ? 'Tunniste: ' + ${tunniste.nimi} : 'Käyttäjä: ' + ${kayttaja.kayttajanimi}"></h2>
 
         <th:block th:each="kuva : ${kuvat}">
             <figure>
-                <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="480"/>
-                <figcaption th:text="${kuva.kuvateksti}">kuvateksti</figcaption>
+                <a th:href="@{/pic/{id}(id=${kuva.id})}">
+                    <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="480"/>
+                </a>
+                <figcaption th:text="${kuva.kuvateksti} + ' (&#169; ' + ${kuva.kayttaja.kayttajanimi} + ')'">kuvateksti</figcaption>
             </figure>
         </th:block>
+        
+        <p align="right"><a th:href="@{~/home}">Takaisin</a></p>
     </body>
 </html>
