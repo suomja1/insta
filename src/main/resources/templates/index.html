@@ -41,5 +41,15 @@
                 </td>
             </tr>
         </table>
+        
+        <h2>Lisää kuvia</h2>
+
+        <form method="POST" th:action="@{/home}" enctype="multipart/form-data">
+            <input type="file" name="kuva"/>
+            <br />
+            <input type="text" name="kuvateksi" placeholder="Kuvateksti" />
+            <br />
+            <input type="submit" value="Lisää!"/>
+        </form>
     </body>
 </html>
