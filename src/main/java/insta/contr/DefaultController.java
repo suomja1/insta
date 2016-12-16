@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,47 +34,48 @@ public class DefaultController {
     @Autowired
     private KuvaRepository kuvaRepository;
     
-//    @PostConstruct
-//    @Transactional
-//    public void init() throws IOException {
-//        if (kayttajaRepository.findByKayttajanimi("taavetti99") != null) {
-//            return;
-//        }
-//        
-//        Kayttaja kayttaja = new Kayttaja();
-//        kayttaja.setKayttajanimi("taavetti99");
-//        kayttaja.setSalasana(passwordEncoder.encode("taavetti99"));
-//        Kuva kuva = new Kuva();
-//        Path polku = Paths.get("src/main/resources/public/P6101609.JPG");
-//        kuva.setSisalto(Files.readAllBytes(polku));
-//        kuva.setKuvateksti("Mmhmm...");
-//        Tunniste tunniste = new Tunniste();
-//        tunniste.setNimi("arvostelemunillallinen");
-//        kayttaja.getKuvat().add(kuva);
-//        kuva.setKayttaja(kayttaja);
-//        kuva.getTunnisteet().add(tunniste);
-//        tunniste.getKuvat().add(kuva);
-//        tunnisteRepository.save(tunniste);
-//        kayttajaRepository.save(kayttaja);
-//        kuvaRepository.save(kuva);
-//        
-//        kayttaja = new Kayttaja();
-//        kayttaja.setKayttajanimi("_miukumauku_");
-//        kayttaja.setSalasana(passwordEncoder.encode("sssalasanass"));
-//        kuva = new Kuva();
-//        polku = Paths.get("src/main/resources/public/P4100070.JPG");
-//        kuva.setSisalto(Files.readAllBytes(polku));
-//        kuva.setKuvateksti("Raidalla on pitkät viikset.");
-//        tunniste = new Tunniste();
-//        tunniste.setNimi("kissakuvat");
-//        kayttaja.getKuvat().add(kuva);
-//        kuva.setKayttaja(kayttaja);
-//        kuva.getTunnisteet().add(tunniste);
-//        tunniste.getKuvat().add(kuva);
-//        tunnisteRepository.save(tunniste);
-//        kayttajaRepository.save(kayttaja);
-//        kuvaRepository.save(kuva);
-//    }
+    @PostConstruct
+    @Profile("dev")
+    @Transactional
+    public void init() throws IOException {
+        if (kayttajaRepository.findByKayttajanimi("taavetti99") != null) {
+            return;
+        }
+        
+        Kayttaja kayttaja = new Kayttaja();
+        kayttaja.setKayttajanimi("taavetti99");
+        kayttaja.setSalasana(passwordEncoder.encode("taavetti99"));
+        Kuva kuva = new Kuva();
+        Path polku = Paths.get("src/main/resources/public/P6101609.JPG");
+        kuva.setSisalto(Files.readAllBytes(polku));
+        kuva.setKuvateksti("Mmhmm...");
+        Tunniste tunniste = new Tunniste();
+        tunniste.setNimi("arvostelemunillallinen");
+        kayttaja.getKuvat().add(kuva);
+        kuva.setKayttaja(kayttaja);
+        kuva.getTunnisteet().add(tunniste);
+        tunniste.getKuvat().add(kuva);
+        tunnisteRepository.save(tunniste);
+        kayttajaRepository.save(kayttaja);
+        kuvaRepository.save(kuva);
+        
+        kayttaja = new Kayttaja();
+        kayttaja.setKayttajanimi("_miukumauku_");
+        kayttaja.setSalasana(passwordEncoder.encode("sssalasanass"));
+        kuva = new Kuva();
+        polku = Paths.get("src/main/resources/public/P4100070.JPG");
+        kuva.setSisalto(Files.readAllBytes(polku));
+        kuva.setKuvateksti("Raidalla on pitkät viikset.");
+        tunniste = new Tunniste();
+        tunniste.setNimi("kissakuvat");
+        kayttaja.getKuvat().add(kuva);
+        kuva.setKayttaja(kayttaja);
+        kuva.getTunnisteet().add(tunniste);
+        tunniste.getKuvat().add(kuva);
+        tunnisteRepository.save(tunniste);
+        kayttajaRepository.save(kayttaja);
+        kuvaRepository.save(kuva);
+    }
     
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String welcome(Model model) {
