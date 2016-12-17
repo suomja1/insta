@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 public class Kayttaja extends AbstractPersistable<Long> {
-    @NotBlank
+    @NotBlank // Tämän validointi ei sitten onnistukaan tavalliseen tapaan...
     @Length(min = 4, max = 30)
     @Column(unique = true)
     private String kayttajanimi;

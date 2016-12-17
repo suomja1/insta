@@ -10,7 +10,6 @@ import insta.repo.KuvaRepository;
 import insta.repo.TunnisteRepository;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +34,8 @@ public class KuvaController {
 
     @RequestMapping(value = "/tag/{id}", method = RequestMethod.GET)
     public String tunnisteittain(Model model, @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String kayttajanimi = auth.getName();
         Tunniste tunniste = tunnisteRepository.findOne(id);
-        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
+        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName()));
         model.addAttribute("tunniste", tunniste);
         model.addAttribute("kuvat", kuvaRepository.findAllByTunnisteet(tunniste));
         return "pics";
@@ -46,10 +43,8 @@ public class KuvaController {
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public String kayttajittain(Model model, @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String kayttajanimi = auth.getName();
         Kayttaja kayttaja = kayttajaRepository.findOne(id);
-        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
+        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName()));
         model.addAttribute("kayttaja", kayttaja);
         model.addAttribute("kuvat", kuvaRepository.findAllByKayttaja(kayttaja));
         return "pics";
@@ -57,9 +52,7 @@ public class KuvaController {
 
     @RequestMapping(value = "/pic/{id}", method = RequestMethod.GET)
     public String yksittain(Model model, @PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String kayttajanimi = auth.getName();
-        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
+        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName()));
         model.addAttribute("kuva", kuvaRepository.findOne(id));
         return "pic";
     }
@@ -70,12 +63,10 @@ public class KuvaController {
         return kuvaRepository.findOne(id).getSisalto();
     }
 
-    @RequestMapping(value = "/pic/{id}/comment", method = RequestMethod.POST)
+    @RequestMapping(value = "/pic/{id}", method = RequestMethod.POST)
     @Transactional
     public String kommentoi(@PathVariable Long id, @RequestParam String kommentti) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String kayttajanimi = auth.getName();
-        Kayttaja ka = kayttajaRepository.findByKayttajanimi(kayttajanimi);
+        Kayttaja ka = kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName());
         Kuva ku = kuvaRepository.findOne(id);
         
         Kommentti ko = new Kommentti();
@@ -96,9 +87,7 @@ public class KuvaController {
             @RequestParam(required = false) String kuvateksti,
             @RequestParam String tunnisteet) throws IOException {
         if (file.getContentType().contains("image")) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String kayttajanimi = auth.getName();
-            Kayttaja kayttaja = kayttajaRepository.findByKayttajanimi(kayttajanimi);
+            Kayttaja kayttaja = kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName());
 
             Kuva kuva = new Kuva();
             kuva.setSisalto(file.getBytes());
@@ -106,9 +95,8 @@ public class KuvaController {
             kuva.setKayttaja(kayttaja);
             
             String[] osat = tunnisteet.split(",");
-            for (int i = 0; i < osat.length; i++) {
-                String nimi = osat[i].trim().toLowerCase();
-                
+            for (String osat1 : osat) {
+                String nimi = osat1.trim().toLowerCase();
                 if (!nimi.isEmpty()) {
                     Tunniste tunniste = tunnisteRepository.findByNimi(nimi);
 

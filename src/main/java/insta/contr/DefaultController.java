@@ -95,9 +95,7 @@ public class DefaultController {
     
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String kayttajanimi = auth.getName();
-        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(kayttajanimi));
+        model.addAttribute("tkayttaja", kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName()));
         model.addAttribute("kayttajat", kayttajaRepository.findAllByOrderByKayttajanimi());
         model.addAttribute("tunnisteet", tunnisteRepository.findAllByOrderByNimi());
         return "index";
