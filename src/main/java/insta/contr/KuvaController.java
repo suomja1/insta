@@ -90,28 +90,11 @@ public class KuvaController {
         return "redirect:/pic/" + id;
     }
 
-    @RequestMapping(value = "/pic/{id}/tag", method = RequestMethod.POST)
-    @Transactional
-    public String lisaaTunniste(@PathVariable Long id, @RequestParam String tunniste) {
-        Kuva k = kuvaRepository.findOne(id);
-        Tunniste t = tunnisteRepository.findByNimi(tunniste);
-
-        if (t == null) {
-            t = new Tunniste();
-            t.setNimi(tunniste);
-            tunnisteRepository.save(t);
-        }
-
-        t.getKuvat().add(k);
-        k.getTunnisteet().add(t);
-
-        return "redirect:/pic/" + id;
-    }
-
     @RequestMapping(value = "/home", method = RequestMethod.POST)
     @Transactional
     public String lisaaKuva(@RequestParam("kuva") MultipartFile file,
-            @RequestParam(required = false) String kuvateksti) throws IOException {
+            @RequestParam(required = false) String kuvateksti,
+            @RequestParam String tunnisteet) throws IOException {
         if (file.getContentType().contains("image")) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String kayttajanimi = auth.getName();
@@ -121,7 +104,25 @@ public class KuvaController {
             kuva.setSisalto(file.getBytes());
             kuva.setKuvateksti(kuvateksti);
             kuva.setKayttaja(kayttaja);
+            
+            String[] osat = tunnisteet.split(",");
+            for (int i = 0; i < osat.length; i++) {
+                String nimi = osat[i].trim().toLowerCase();
+                
+                if (!nimi.isEmpty()) {
+                    Tunniste tunniste = tunnisteRepository.findByNimi(nimi);
 
+                    if (tunniste == null) {
+                        tunniste = new Tunniste();
+                        tunniste.setNimi(nimi);
+                        tunnisteRepository.save(tunniste);
+                    }
+
+                    tunniste.getKuvat().add(kuva);
+                    kuva.getTunnisteet().add(tunniste);
+                }
+            }
+            
             kayttaja.getKuvat().add(kuva);
             kuvaRepository.save(kuva);
         }

@@ -24,20 +24,13 @@
         <h2 th:text="${kuva.kayttaja.kayttajanimi} + ': ' + ${kuva.kuvateksti}">kuvateksti</h2>
 
         <figure>
-            <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="800"/>
+            <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="75%"/>
             <figcaption>
                 <th:block th:each="tunniste : ${kuva.tunnisteet}">
                     <span><a th:href="@{/tag/{id}(id=${tunniste.id})}" th:text="${tunniste.nimi}">tunniste</a> </span>
                 </th:block>
             </figcaption>
         </figure>
-        
-        <h3>Lisää tunniste</h3>
-        
-        <form method="POST" th:action="@{/pic/{id}/tag(id=${kuva.id})}">
-            <input type="text" name="tunniste" placeholder="Tunniste" />
-            <input type="submit" value="Lisää!"/>
-        </form>
         
         <h3>Kommentit</h3>
         

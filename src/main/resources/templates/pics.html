@@ -26,7 +26,7 @@
         <th:block th:each="kuva : ${kuvat}">
             <figure>
                 <a th:href="@{/pic/{id}(id=${kuva.id})}">
-                    <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="480"/>
+                    <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="50%"/>
                 </a>
                 <figcaption th:text="${kuva.kuvateksti} + ' (&#169; ' + ${kuva.kayttaja.kayttajanimi} + ')'">kuvateksti</figcaption>
             </figure>

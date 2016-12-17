@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>insta</title>
+    </head>
+    <body>
+        <header>
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <h1><a href="/home">insta</a></h1>
+                    </td>
+                </tr>
+            </table>
+        </header>
+
+        <table style="width:100%"> 
+            <tr>
+                <th>Kirjaudu sisään</th>
+                <th>Luo käyttäjä</th> 
+            </tr>
+            <tr>
+                <td valign='top' width="50%">
+                    <form name="f" th:action="@{/login}" method="post">
+                        <table>
+                            <tr><td>Käyttäjänimi:</td><td><input type="text" name="username" /></td></tr>
+                            <tr><td>Salasana:</td><td><input type="text" name="password" /></td></tr>
+                            <tr><td colspan='2'><input type="submit" value="Kirjaudu!" /></td></tr>
+                        </table>
+
+                        <p th:if="${param.error}" class="alert alert-error">
+                            Sisäänkirjautuminen epäonnistui.
+                        </p>
+                    </form>
+                </td>
+                <td valign='top' width="50%">
+                    <form action="#" method="POST" th:action="@{/create}" th:object="${kayttaja}">
+                        <table>
+                            <tr><td>Käyttäjänimi:</td><td><input type="text" th:field="*{kayttajanimi}" /></td></tr>
+                            <tr><td>Salasana:</td><td><input type="text" th:field="*{salasana}" /></td></tr>
+                            <tr><td colspan='2'><input type="submit" value="Luo!" /></td></tr>
+                        </table>
+                        
+                        <p th:if="${#fields.hasErrors('kayttajanimi')}">
+                            username <span th:errors="*{kayttajanimi}">Virheviesti</span>
+                        </p>
+                        <p th:if="${#fields.hasErrors('salasana')}">
+                            password <span th:errors="*{salasana}">Virheviesti</span>
+                        </p>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -13,17 +13,18 @@ import java.nio.file.Paths;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("*")
 public class DefaultController {
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -46,7 +47,7 @@ public class DefaultController {
         kayttaja.setKayttajanimi("taavetti99");
         kayttaja.setSalasana(passwordEncoder.encode("taavetti99"));
         Kuva kuva = new Kuva();
-        Path polku = Paths.get("src/main/resources/public/P6101609.JPG");
+        Path polku = Paths.get("src/main/resources/static/images/P6101609.JPG");
         kuva.setSisalto(Files.readAllBytes(polku));
         kuva.setKuvateksti("Mmhmm...");
         Tunniste tunniste = new Tunniste();
@@ -63,7 +64,7 @@ public class DefaultController {
         kayttaja.setKayttajanimi("_miukumauku_");
         kayttaja.setSalasana(passwordEncoder.encode("sssalasanass"));
         kuva = new Kuva();
-        polku = Paths.get("src/main/resources/public/P4100070.JPG");
+        polku = Paths.get("src/main/resources/static/images/P4100070.JPG");
         kuva.setSisalto(Files.readAllBytes(polku));
         kuva.setKuvateksti("Raidalla on pitkät viikset.");
         tunniste = new Tunniste();
@@ -77,9 +78,19 @@ public class DefaultController {
         kuvaRepository.save(kuva);
     }
     
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String welcome(Model model) {
-        return "welcome";
+    @RequestMapping(value = "*", method = RequestMethod.GET)
+    public String welcome() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/home";
+        }
+        
+        return "redirect:/login";
+    }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String loginPage(@ModelAttribute Kayttaja kayttaja) {
+        return "login";
     }
     
     @RequestMapping(value = "/home", method = RequestMethod.GET)
