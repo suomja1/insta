@@ -75,7 +75,7 @@ public class KuvaController {
     @Transactional
     public String lisaaKuva(@RequestParam("kuva") MultipartFile file,
             @RequestParam(required = false) String kuvateksti,
-            @RequestParam String tunnisteet) {
+            @RequestParam(required = false) String tunnisteet) {
         kuvaService.lisaaKuva(
                 kayttajaRepository.findByKayttajanimi(SecurityContextHolder.getContext().getAuthentication().getName()),
                 file,

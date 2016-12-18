@@ -26,7 +26,7 @@
                     <form name="f" th:action="@{/login}" method="post">
                         <table>
                             <tr><td>Käyttäjänimi:</td><td><input type="text" name="username" /></td></tr>
-                            <tr><td>Salasana:</td><td><input type="text" name="password" /></td></tr>
+                            <tr><td>Salasana:</td><td><input type="password" name="password" /></td></tr>
                             <tr><td colspan='2'><input type="submit" value="Kirjaudu!" /></td></tr>
                         </table>
 
@@ -39,7 +39,7 @@
                     <form action="#" method="POST" th:action="@{/create}" th:object="${kayttaja}">
                         <table>
                             <tr><td>Käyttäjänimi:</td><td><input type="text" th:field="*{kayttajanimi}" /></td></tr>
-                            <tr><td>Salasana:</td><td><input type="text" th:field="*{salasana}" /></td></tr>
+                            <tr><td>Salasana:</td><td><input type="password" th:field="*{salasana}" /></td></tr>
                             <tr><td colspan='2'><input type="submit" value="Luo!" /></td></tr>
                         </table>
                         

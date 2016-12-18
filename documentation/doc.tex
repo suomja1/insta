@@ -37,9 +37,7 @@ Sovellus löytyy osoitteesta \url{https://evening-island-18993.herokuapp.com}. S
 
 Erilliset tuotanto- ja testausprofiilit sujuvoittavat sovelluksen kehittämistä. \textsf{insta}ssa profiilit on toteutettu erillisillä konfiguraatiotiedostoilla ja Springin tarjoamalla Profile"-annotaatiolla. Käytettävä profiili valitaan sovelluksen main"-luokassa SpringApplication"-luokan setAdditionalProfiles"-metodilla.
 
-\textsf{insta}an tunnistaudutaan käyttäjänimellä ja salasanalla. Kuka tahansa pystyy luomaan käyttäjän kirjautumissivulla.
-
-\begin{wrapfigure}{r}{.5\linewidth-.5\columnsep}
+\begin{wrapfigure}[15]{r}{.5\linewidth-.5\columnsep}
 \vspace*{-\intextsep}
 \centering\includegraphics[width=\linewidth]{6424b8c7}
 \caption{Tietokantakaavio.}\label{fig:tk}
@@ -48,14 +46,26 @@ Erilliset tuotanto- ja testausprofiilit sujuvoittavat sovelluksen kehittämistä
 Sovellus käyttää tietokantaa, jossa on yhteensä viisi taulua. Yksi näistä on liitostaulu. Testausprofiilissa käytetään H2 Database "-tietokantaa, joka ladataan muistiin aina sovelluksen käynnistyessä. Tuotantoprofiilissa käytetään Herokun tarjoamaa Postgres"-tietokantaa. Tietokantakaavio on esitetty kuvassa~\ref{fig:tk}.
 
 \section{Keskeisiä käyttötapauksia}
+Uusi käyttäjä pystyy luomaan tunnuksen sovelluksen kirjautumissivulla syöttämällä Luo käyttäjä "=otsakkeen alla oleviin kenttiin käyttäjänimen ja salasanan. Käyttäjänimi on uniikki, 4--30 merkkiä pitkä merkkijono, salasana yli 6 merkkiä. Merkkien pituus on validoitu -- tosin englanninkielisin virheviestein.
+
+Käyttäjä pystyy kirjautumaan sovellukseen syöttämällä Kirjaudu sisään "=otsakkeen alla oleviin kenttiin käyttäjänimen ja salasanan. Kirjautumisen epäonnistuessa annetaan selkokielinen virheviesti. Sisäänkirjauduttuaan käyttäjä pystyy kirjautumaan ulos sivun oikeassa ylälaidassa olevasta Kirjaudu ulos "=painikkeesta.
+
+Uuden kuvan lisääminen käy kotisivun alareunassa olevalla lomakkeella. Lomakkeella valitaan kuvatiedosto, kuvan kuvateksti ja tunnisteet. Jälkimmäiset näistä ovat vapaaehtoisia. Kuvatiedostolla on kokorajoitus. Tunnisteet syötetään pilkuin erotettuna listana. Latauksen onnistuessa kuva piennennetään ja lisätään tietokantaan kuvateksteineen ja tunnisteineen.
+
+Käyttäjä pystyy selata kuvia kolmella eri tavalla: käyttäjittäin, tunnisteittain ja yksittäin. Käyttäjä- ja tunnistekohtaisilla sivuilla kuvista kerrotaan käyttäjän tai tunnisteen lisäksi kuvan kuvateksti, kuvan lisääjä ja kommenttien lukumäärä. Kuvakohtaisella sivulla listataan kaikki kuvan tunnisteet ja kommentit.
+
+Kuvan kommentointi tapahtuu kuvakohtaisen sivun alareunassa olevalla lomakkeella. Kommentti tallentuu aina kirjautuneen käyttäjän nimellä kuvan alle.
+
 navigointi
 
-syötteiden validointi
-
 \section{Jatkokehitys}
-testit
+Sovellukselle pitää kirjoittaa kattavat yksikkö-, integraatio- ja järjestelmätestit.
 
-syötteiden validointi
+Yritettäessä luoda uutta käyttäjää, jolla on sama käyttäjänimi jo olemassa olevan käyttäjän kanssa, antaa sovellus automaattisen virheviestin (500). Tämä ei ole kaunista luettavaa. Käyttäjänimen uniikkius tulisi validoida ennen yritystä kirjoittaa tietokantaan. Lisäksi sovellus ei ilmoita käyttäjälle, jos käyttäjän luominen onnistuu.
+
+Lisää kuva -lomaketta ei ole validoitu. Kuvateksti- ja tunniste-kenttien kohdalla tämä ei ole välttämätöntä, mutta tiedostotyypin ja "=koon tarkastaminen olisi oleellista.
+
+Tietokantatauluihin voisi lisätä ajankohta-attribuutin, jolloin esimerkiksi kommentit voitaisiin järjestään niiden lisäämisajankohdan mukaan.
 
 roolit
 
