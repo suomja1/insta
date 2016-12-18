@@ -43,7 +43,7 @@ Erilliset tuotanto- ja testausprofiilit sujuvoittavat sovelluksen kehittämistä
 \caption{Tietokantakaavio.}\label{fig:tk}
 \end{wrapfigure}
 
-Sovellus käyttää tietokantaa, jossa on yhteensä viisi taulua. Yksi näistä on liitostaulu. Testausprofiilissa käytetään H2 Database "-tietokantaa, joka ladataan muistiin aina sovelluksen käynnistyessä. Tuotantoprofiilissa käytetään Herokun tarjoamaa Postgres"-tietokantaa. Tietokantakaavio on esitetty kuvassa~\ref{fig:tk}.
+Profiileihin liittyy kiinteästi käytettävä tietokanta. Sovellus käyttää tietokantaa, jossa on yhteensä viisi taulua. Yksi näistä on liitostaulu. Testausprofiilissa käytetään H2 Database "-tietokantaa, joka ladataan muistiin aina sovelluksen käynnistyessä. Tuotantoprofiilissa käytetään Herokun tarjoamaa Postgres"-tietokantaa. Tietokantakaavio on esitetty kuvassa~\ref{fig:tk}.
 
 \section{Keskeisiä käyttötapauksia}
 Uusi käyttäjä pystyy luomaan tunnuksen sovelluksen kirjautumissivulla syöttämällä Luo käyttäjä "=otsakkeen alla oleviin kenttiin käyttäjänimen ja salasanan. Käyttäjänimi on uniikki, 4--30 merkkiä pitkä merkkijono, salasana yli 6 merkkiä. Merkkien pituus on validoitu -- tosin englanninkielisin virheviestein.
@@ -59,17 +59,13 @@ Kuvan kommentointi tapahtuu kuvakohtaisen sivun alareunassa olevalla lomakkeella
 Sovelluksessa navigointi tapahtuu sivuilla olevien linkkien avulla.																																																																																																																																																																																																																																																																																																																																																																																																																				
 
 \section{Jatkokehitys}
-Sovellukselle pitää vielä kirjoittaa kattavat yksikkö-, integraatio- ja järjestelmätestit.
+Ensimmäisenä versiona solvelluksessa on vielä paljon kehitettävää. Ehkä kriittisimpänä sovellukselle pitää vielä kirjoittaa kattavat yksikkö-, integraatio- ja järjestelmätestit.
 
-Yritettäessä luoda uutta käyttäjää, jolla on sama käyttäjänimi jo olemassa olevan käyttäjän kanssa, antaa sovellus automaattisen virheviestin (500). Tämä ei ole kaunista luettavaa. Käyttäjänimen uniikkius tulisi validoida ennen yritystä kirjoittaa tietokantaan. Lisäksi sovellus ei ilmoita käyttäjälle, vaikka käyttäjän luominen onnistuu.
+Sovelluksen käyttöliittymään, ulkonäköön ei ole kiinnitetty vielä tarpeeksi huomiota. Tähän liittyvät mahdollisten virheviestien selkokieleistäminen ja syötteiden ohjeistaminen. Lisäksi taulukkorakenteiden käyttö sivujen rakentamisessa lienee vanhanaikaista. Sivua ei löydy "=virheen tavoin myös muut virheviestit pitää luoda. Käytettävyyttä lisäisi myös palvelinpuolen välimuisti, mikä vaihdittaisi kuvien lataamista.
 
-Lisää kuva -lomaketta ei ole validoitu. Kuvateksti- ja tunniste-kenttien kohdalla tämä ei ole välttämätöntä, mutta tiedostotyypin ja "=koon tarkastaminen olisi oleellista.
+Paikoin syötteiden validiointi on vajavaista. Yritettäessä luoda uutta käyttäjää, jolla on sama käyttäjänimi jo olemassa olevan käyttäjän kanssa, antaa sovellus automaattisen virheviestin (500). Tämä ei ole kaunista luettavaa. Käyttäjänimen uniikkius tulisi validoida ennen yritystä kirjoittaa tietokantaan. Lisäksi sovellus ei ilmoita käyttäjälle, vaikka käyttäjän luominen onnistuu. Puolestaan Lisää kuva -lomaketta ei ole validoitu laisinkaan. Kuvateksti- ja tunniste-kenttien kohdalla tämä ei ole välttämätöntä, mutta tiedostotyypin ja "=koon tarkastaminen olisi oleellista.
 
-Tietokantatauluihin voisi lisätä ajankohta-attribuutin, jolloin esimerkiksi kommentit voitaisiin järjestään niiden lisäämisajankohdan mukaan.
+Jatkokehityskohteena tietokantatauluihin voisi lisätä ajankohta-attribuutin, jolloin esimerkiksi kommentit voitaisiin järjestään niiden lisäämisajankohdan mukaan. Myös muita statistiikkaan liittyviä attribuutteja voisi olla mielenkiintoista pystyä tallentamaan tietokantaan\ldots
 
-Sovelluksessa ei ole implementoitu käyttäjien rooleja. Toisin sanoen minkäänlaista moderointi-toiminnalisuutta ei ole toteutettu. Toistaiseksi myös kaikki poistamis- ja muokkaamistoiminnallisuudet puuttuvat.
-
-Sivua ei löydy -virheen tavoin myös muuta virheviestit pitää luoda.
-
-Palvelinpuolen välimuisti vaihdittaisi useampien kuvien lataamista.
+Sovelluksessa ei ole implementoitu käyttäjien rooleja. Toisin sanoen minkäänlaista moderointi-toiminnalisuutta ei ole toteutettu. Toistaiseksi myös kaikki poistamis- ja muokkaamistoiminnallisuudet puuttuvat. Tykkäämistoiminto olisi helppo implementoida JavaScriptillä.
 \end{document}
