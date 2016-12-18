@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +35,6 @@ public class DefaultController {
     private KuvaRepository kuvaRepository;
     
     @PostConstruct
-    @Profile("dev")
     @Transactional
     public void init() throws IOException {
         if (kayttajaRepository.findByKayttajanimi("taavetti99") != null) {
