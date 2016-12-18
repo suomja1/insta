@@ -2,6 +2,7 @@
 *.log
 *.toc
 *.synctex.gz
+*.out
 /target/
 target
 
