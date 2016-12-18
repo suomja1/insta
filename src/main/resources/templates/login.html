@@ -43,10 +43,10 @@
                             <tr><td colspan='2'><input type="submit" value="Luo!" /></td></tr>
                         </table>
                         
-                        <p th:if="${#fields.hasErrors('kayttajanimi')}">
+                        <p th:if="${#fields.hasErrors('kayttajanimi')}" class="alert alert-error">
                             username <span th:errors="*{kayttajanimi}">Virheviesti</span>
                         </p>
-                        <p th:if="${#fields.hasErrors('salasana')}">
+                        <p th:if="${#fields.hasErrors('salasana')}" class="alert alert-error">
                             password <span th:errors="*{salasana}">Virheviesti</span>
                         </p>
                     </form>

@@ -22,7 +22,10 @@
             </table>
         </header>
 
-        <h2 th:text="${kuva.kayttaja.kayttajanimi} + ': ' + ${kuva.kuvateksti}">kuvateksti</h2>
+        <h2>
+            <a th:href="@{/user/{id}(id=${kuva.kayttaja.id})}" th:text="${kuva.kayttaja.kayttajanimi}">nimi</a>: 
+            <span th:text="${kuva.kuvateksti}">kuvateksti</span>
+        </h2>
 
         <figure>
             <img th:src="@{/pic/{id}/content(id=${kuva.id})}" width="75%"/>
@@ -32,18 +35,19 @@
                 </th:block>
             </figcaption>
         </figure>
-        
+
         <h3>Kommentit</h3>
-        
+
         <p th:each="kommentti : ${kuva.kommentit}">
-            <span th:text="${kommentti.sisalto} + ' /' + ${kommentti.kayttaja.kayttajanimi}">kommentti</span>
+            <span th:text="${kommentti.sisalto}">kommentti</span> 
+            /<a th:href="@{/user/{id}(id=${kommentti.kayttaja.id})}" th:text="${kommentti.kayttaja.kayttajanimi}">nimi</a>
         </p>
-        
+
         <form method="POST" th:action="@{/pic/{id}(id=${kuva.id})}">
             <input type="text" name="kommentti" placeholder="Kommentti" />
             <input type="submit" value="Kommentoi!"/>
         </form>
-        
+
         <p align="right"><a href="javascript:javascript:history.go(-1)">Takaisin</a></p>
     </body>
 </html>
