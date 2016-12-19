@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +102,21 @@ public class KuvaService {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(thumb, "png", out);
         return out.toByteArray();
+    }
+    
+    public List<Kuva> haeKaikki(Tunniste tunniste) {
+        return this.kuvaRepository.findAllByTunnisteet(tunniste);
+    }
+    
+    public List<Kuva> haeKaikki(Kayttaja kayttaja) {
+        return this.kuvaRepository.findAllByKayttaja(kayttaja);
+    }
+    
+    public Kuva hae(Long id) {
+        return this.kuvaRepository.findOne(id);
+    }
+    
+    public void tallenna(Kuva kuva) {
+        kuvaRepository.save(kuva);
     }
 }
