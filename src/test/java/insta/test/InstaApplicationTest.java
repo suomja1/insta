@@ -36,13 +36,13 @@ public class InstaApplicationTest {
         assertTrue(true);
     }
     
-    @Test
-    public void testViewLoginPage() throws Exception {
-        MvcResult res = mockMvc.perform(get("/login"))
-                .andExpect(status().isOk()).andReturn();
-        
-        assertEquals("login", res.getModelAndView().getViewName());
-    }
+//    @Test
+//    public void testViewLoginPage() throws Exception {
+//        MvcResult res = mockMvc.perform(get("/login"))
+//                .andExpect(status().isOk()).andReturn();
+//        
+//        assertEquals("login", res.getModelAndView().getViewName());
+//    }
     
 //    @Test
 //    public void testCreateUserAndLogin() throws Exception {

@@ -13,3 +13,7 @@ deploy:
   app: evening-island-18993
   on:
     repo: suomja1/insta
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
