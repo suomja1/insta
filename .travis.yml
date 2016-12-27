@@ -13,9 +13,3 @@ deploy:
   app: evening-island-18993
   on:
     repo: suomja1/insta
-services:
-  - postgresql
-env:
-    - SPRING_PROFILES_ACTIVE=travis
-before_script:
-    - psql -c "create database dBase;" -U postgres
