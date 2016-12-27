@@ -24,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("prod")
 public class InstaApplicationTest {
     @Autowired
     private WebApplicationContext webAppContext;
