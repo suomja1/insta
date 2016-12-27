@@ -43,13 +43,13 @@ public class KuvaService {
     }
     
     @Transactional
-    public boolean lisaaKuva(Kayttaja kayttaja, MultipartFile file, String kuvateksti, String tunnisteet) {
+    public void lisaaKuva(Kayttaja kayttaja, MultipartFile file, String kuvateksti, String tunnisteet) {
         if (file.getContentType().contains("image")) {
             byte[] sisalto;
             try {
                 sisalto = pienenna(file.getBytes());
             } catch (IOException ex) {
-                return false;
+                return;
             }
 
             Kuva kuva = new Kuva();
@@ -61,11 +61,7 @@ public class KuvaService {
 
             kayttaja.getKuvat().add(kuva);
             kuvaRepository.save(kuva);
-            
-            return true;
         }
-        
-        return false;
     }
 
     private void lisaaTunnisteet(String tunnisteet, Kuva kuva) {

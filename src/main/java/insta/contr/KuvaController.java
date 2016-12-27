@@ -67,7 +67,6 @@ public class KuvaController {
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
-    @Transactional
     public String lisaaKuva(@RequestParam("kuva") MultipartFile file,
             @RequestParam(required = false) String kuvateksti,
             @RequestParam(required = false) String tunnisteet) {
