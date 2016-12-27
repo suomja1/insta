@@ -2,6 +2,7 @@ package insta.dom;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Kuva extends AbstractPersistable<Long> {
     @Lob
+    @Column(name = "kuva")
     private byte[] sisalto;
     private String kuvateksti;
     @ManyToOne
