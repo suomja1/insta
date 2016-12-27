@@ -2,20 +2,16 @@ package insta.dom;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 public class Kuva extends AbstractPersistable<Long> {
     @Lob
-    @Column(name = "kuva")
-//    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] sisalto;
     private String kuvateksti;
     @ManyToOne
