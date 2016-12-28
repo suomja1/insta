@@ -7,12 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,7 +31,7 @@ public class InstaApplicationTest {
     @Autowired
     private KayttajaService kayttajaService;
     private MockMvc mockMvc;
-
+    
     @Before
     public void setUp() {
         this.mockMvc = MockMvcBuilders
@@ -38,15 +39,15 @@ public class InstaApplicationTest {
                 .apply(springSecurity())
                 .build();
     }
-
+    
     @Test
     public void testViewLoginPage() throws Exception {
         MvcResult res = mockMvc.perform(get("/login"))
                 .andExpect(status().isOk()).andReturn();
-
+        
         assertEquals("login", res.getModelAndView().getViewName());
     }
-
+    
     @Test
     public void testLogin() throws Exception {
         mockMvc.perform(formLogin()
@@ -55,7 +56,7 @@ public class InstaApplicationTest {
                 .andExpect(unauthenticated())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error"));
-
+        
         mockMvc.perform(formLogin()
                 .user("taavetti99")
                 .password("taavetti99"))
@@ -63,13 +64,18 @@ public class InstaApplicationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
     }
-
+    
     @Test
     public void testCreateUserAndLogin() throws Exception {
         String username = "kayttaja";
         String password = "salasana";
-
-            mockMvc.perform(post("/create")
+        
+        mockMvc.perform(formLogin()
+                .user(username)
+                .password(password))
+                .andExpect(unauthenticated());
+        
+        mockMvc.perform(post("/create")
                 .with(csrf())
                 .param("kayttajanimi", username)
                 .param("salasana", password))
@@ -85,6 +91,24 @@ public class InstaApplicationTest {
     }
     
     @Test
+    public void testLogoutLoginLogout() throws Exception {
+        mockMvc.perform(logout())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(unauthenticated());
+        
+        mockMvc.perform(formLogin()
+                .user("taavetti99")
+                .password("taavetti99"))
+                .andExpect(authenticated());
+        
+        mockMvc.perform(logout())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(unauthenticated());
+    }
+    
+    @Test
     public void testViewHome() throws Exception {
         mockMvc.perform(get("/home"))
                 .andExpect(status().is3xxRedirection())
@@ -93,9 +117,20 @@ public class InstaApplicationTest {
         MvcResult res = mockMvc.perform(get("/home")
                 .with(user("taavetti99").password("taavetti99")))
                 .andExpect(status().isOk()).andReturn();
-
+        
         assertEquals("index", res.getModelAndView().getViewName());
+    }
+    
+    @Test
+    @WithMockUser
+    public void testAddImage() throws Exception {
+        MockMultipartFile multipartFile = new MockMultipartFile("file", "tiedosto.jpg", "image/jpg", "tiedosto".getBytes());
         
-        
+        mockMvc.perform(fileUpload("/home")
+                .file(multipartFile)
+                .param("kuvateksti", "Kuvateksti.")
+                .param("tunnisteet", "tunniste1,tunniste2,   tunniste3"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
     }
 }
