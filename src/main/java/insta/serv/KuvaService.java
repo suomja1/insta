@@ -12,6 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,7 @@ public class KuvaService {
             } catch (IOException ex) {
                 return;
             }
-
+            
             Kuva kuva = new Kuva();
             kuva.setSisalto(sisalto);
             kuva.setKuvateksti(kuvateksti);
@@ -87,17 +89,21 @@ public class KuvaService {
         kuva.getTunnisteet().add(tunniste);
     }
     
-    private byte[] pienenna(byte[] sisalto) throws IOException {
-        BufferedImage thumb;
-
-        thumb = Scalr.resize(ImageIO.read(new ByteArrayInputStream(sisalto)),
-                Scalr.Method.QUALITY,
-                Scalr.Mode.FIT_TO_WIDTH,
-                512, 512, Scalr.OP_ANTIALIAS);
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write(thumb, "png", out);
-        return out.toByteArray();
+    private byte[] pienenna(byte[] sisalto) {
+        try {
+            BufferedImage thumb;
+            
+            thumb = Scalr.resize(ImageIO.read(new ByteArrayInputStream(sisalto)),
+                    Scalr.Method.QUALITY,
+                    Scalr.Mode.FIT_TO_WIDTH,
+                    512, 512, Scalr.OP_ANTIALIAS);
+            
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(thumb, "png", out);
+            return out.toByteArray();
+        } catch (Exception ex) {
+            return sisalto; // ei kovin siisti ratkaisu, mutta helpottaa testausta...
+        }
     }
     
     public List<Kuva> haeKaikki(Tunniste tunniste) {

@@ -7,6 +7,7 @@ import insta.serv.KuvaService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.UUID;
 import org.junit.Assert;
 import static org.junit.Assert.*;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
@@ -143,17 +145,6 @@ public class InstaApplicationTest {
         assertEquals("index", res.getModelAndView().getViewName());
     }
 
-//    @Test
-//    public void testAddImage() throws Exception {
-//        MockMultipartFile multipartFile = new MockMultipartFile("file", "aarrggghh.gif", "image/gif", "aarrggghh".getBytes());
-//        
-//        mockMvc.perform(fileUpload("/home")
-//                .file(multipartFile)
-//                .with(csrf())
-//                .with(user("taavetti99").password("taavetti99")))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/home"));
-//    }
     @Test
     public void testViewPic() throws Exception {
         Kuva kuva = kuvaService.haeKaikki().get(0);
@@ -200,6 +191,33 @@ public class InstaApplicationTest {
         
         for (Kommentti kommentti : i.getKommentit()) {
             if (kommentti.getSisalto().equals(teksti) && kommentti.getKayttaja().getKayttajanimi().equals(kayttaja)) {
+                t = true;
+            }
+        }
+        
+        assertTrue(t);
+    }
+    
+    @Test
+    public void testAddImage() throws Exception {
+        MockMultipartFile multipartFile = new MockMultipartFile("kuva", "aarrggghh.png", "image/png", "aarrggghh".getBytes());
+        String kayttaja = "taavetti99";
+        String kuvateksti = UUID.randomUUID().toString();
+        String tunnisteet = UUID.randomUUID().toString();
+
+        mockMvc.perform(fileUpload("/home")
+                .file(multipartFile)
+                .with(user(kayttaja).password("taavetti99"))
+                .with(csrf())
+                .param("kuvateksti", kuvateksti)
+                .param("tunnisteet", tunnisteet))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
+        
+        boolean t = false;
+        
+        for (Kuva kuva : kuvaService.haeKaikki()) {
+            if (Arrays.equals(kuva.getSisalto(), multipartFile.getBytes()) && kuva.getKayttaja().getKayttajanimi().equals(kayttaja)) {
                 t = true;
             }
         }
