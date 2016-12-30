@@ -1,6 +1,14 @@
 package insta.test;
 
+import insta.dom.Kommentti;
+import insta.dom.Kuva;
 import insta.serv.KayttajaService;
+import insta.serv.KuvaService;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+import org.junit.Assert;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -26,10 +33,13 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InstaApplicationTest {
+    
     @Autowired
     private WebApplicationContext webAppContext;
     @Autowired
     private KayttajaService kayttajaService;
+    @Autowired
+    private KuvaService kuvaService;
     private MockMvc mockMvc;
     
     @Before
@@ -38,6 +48,18 @@ public class InstaApplicationTest {
                 .webAppContextSetup(webAppContext)
                 .apply(springSecurity())
                 .build();
+    }
+    
+    @Test
+    public void testRoot() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        
+        mockMvc.perform(get("/")
+                .with(user("taavetti99").password("taavetti99")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
     }
     
     @Test
@@ -120,17 +142,68 @@ public class InstaApplicationTest {
         
         assertEquals("index", res.getModelAndView().getViewName());
     }
+
+//    @Test
+//    public void testAddImage() throws Exception {
+//        MockMultipartFile multipartFile = new MockMultipartFile("file", "aarrggghh.gif", "image/gif", "aarrggghh".getBytes());
+//        
+//        mockMvc.perform(fileUpload("/home")
+//                .file(multipartFile)
+//                .with(csrf())
+//                .with(user("taavetti99").password("taavetti99")))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl("/home"));
+//    }
+    @Test
+    public void testViewPic() throws Exception {
+        Kuva kuva = kuvaService.haeKaikki().get(0);
+        
+        mockMvc.perform(get("/pic/" + kuva.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        
+        MvcResult res = mockMvc.perform(get("/pic/" + kuva.getId())
+                .with(user("taavetti99").password("taavetti99")))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("kuva"))
+                .andReturn();
+        
+        assertEquals("pic", res.getModelAndView().getViewName());
+        
+        Kuva i = (Kuva) res.getModelAndView().getModel().get("kuva");
+        
+        Assert.assertArrayEquals(kuva.getSisalto(), i.getSisalto());
+    }
     
     @Test
-    @WithMockUser
-    public void testAddImage() throws Exception {
-        MockMultipartFile multipartFile = new MockMultipartFile("file", "tiedosto.jpg", "image/jpg", "tiedosto".getBytes());
+    public void testComment() throws Exception {
+        String kayttaja = "taavetti99";
+        String teksti = UUID.randomUUID().toString();
+        Kuva kuva = kuvaService.haeKaikki().get(0);
         
-        mockMvc.perform(fileUpload("/home")
-                .file(multipartFile)
-                .param("kuvateksti", "Kuvateksti.")
-                .param("tunnisteet", "tunniste1,tunniste2,   tunniste3"))
+        mockMvc.perform(post("/pic/" + kuva.getId())
+                .with(user(kayttaja).password("taavetti99"))
+                .with(csrf())
+                .param("kommentti", teksti))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/home"));
+                .andExpect(redirectedUrl("/pic/" + kuva.getId()));
+        
+        MvcResult res = mockMvc.perform(get("/pic/" + kuva.getId())
+                .with(user(kayttaja).password("taavetti99")))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("kuva"))
+                .andReturn();
+        
+        Kuva i = (Kuva) res.getModelAndView().getModel().get("kuva");
+        
+        boolean t = false;
+        
+        for (Kommentti kommentti : i.getKommentit()) {
+            if (kommentti.getSisalto().equals(teksti) && kommentti.getKayttaja().getKayttajanimi().equals(kayttaja)) {
+                t = true;
+            }
+        }
+        
+        assertTrue(t);
     }
 }

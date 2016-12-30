@@ -108,6 +108,10 @@ public class KuvaService {
         return this.kuvaRepository.findAllByKayttaja(kayttaja);
     }
     
+    public List<Kuva> haeKaikki() {
+        return this.kuvaRepository.findAll();
+    }
+    
     public Kuva hae(Long id) {
         return this.kuvaRepository.findOne(id);
     }
