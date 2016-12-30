@@ -29,13 +29,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InstaApplicationTest {
-    
     @Autowired
     private WebApplicationContext webAppContext;
     @Autowired
@@ -43,7 +41,7 @@ public class InstaApplicationTest {
     @Autowired
     private KuvaService kuvaService;
     private MockMvc mockMvc;
-    
+
     @Before
     public void setUp() {
         this.mockMvc = MockMvcBuilders
@@ -51,27 +49,27 @@ public class InstaApplicationTest {
                 .apply(springSecurity())
                 .build();
     }
-    
+
     @Test
     public void testRoot() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
-        
+
         mockMvc.perform(get("/")
                 .with(user("taavetti99").password("taavetti99")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
     }
-    
+
     @Test
     public void testViewLoginPage() throws Exception {
         MvcResult res = mockMvc.perform(get("/login"))
                 .andExpect(status().isOk()).andReturn();
-        
+
         assertEquals("login", res.getModelAndView().getViewName());
     }
-    
+
     @Test
     public void testLogin() throws Exception {
         mockMvc.perform(formLogin()
@@ -80,7 +78,7 @@ public class InstaApplicationTest {
                 .andExpect(unauthenticated())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error"));
-        
+
         mockMvc.perform(formLogin()
                 .user("taavetti99")
                 .password("taavetti99"))
@@ -88,116 +86,116 @@ public class InstaApplicationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
     }
-    
+
     @Test
     public void testCreateUserAndLogin() throws Exception {
         String username = "kayttaja";
         String password = "salasana";
-        
+
         mockMvc.perform(formLogin()
                 .user(username)
                 .password(password))
                 .andExpect(unauthenticated());
-        
+
         mockMvc.perform(post("/create")
                 .with(csrf())
                 .param("kayttajanimi", username)
                 .param("salasana", password))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
-        
+
         assertTrue(kayttajaService.hae(username) != null);
-        
+
         mockMvc.perform(formLogin()
                 .user(username)
                 .password(password))
                 .andExpect(authenticated());
     }
-    
+
     @Test
     public void testLogoutLoginLogout() throws Exception {
         mockMvc.perform(logout())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"))
                 .andExpect(unauthenticated());
-        
+
         mockMvc.perform(formLogin()
                 .user("taavetti99")
                 .password("taavetti99"))
                 .andExpect(authenticated());
-        
+
         mockMvc.perform(logout())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"))
                 .andExpect(unauthenticated());
     }
-    
+
     @Test
     public void testViewHome() throws Exception {
         mockMvc.perform(get("/home"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
-        
+
         MvcResult res = mockMvc.perform(get("/home")
                 .with(user("taavetti99").password("taavetti99")))
                 .andExpect(status().isOk()).andReturn();
-        
+
         assertEquals("index", res.getModelAndView().getViewName());
     }
 
     @Test
     public void testViewPic() throws Exception {
         Kuva kuva = kuvaService.haeKaikki().get(0);
-        
+
         mockMvc.perform(get("/pic/" + kuva.getId()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
-        
+
         MvcResult res = mockMvc.perform(get("/pic/" + kuva.getId())
                 .with(user("taavetti99").password("taavetti99")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("kuva"))
                 .andReturn();
-        
+
         assertEquals("pic", res.getModelAndView().getViewName());
-        
+
         Kuva i = (Kuva) res.getModelAndView().getModel().get("kuva");
-        
+
         Assert.assertArrayEquals(kuva.getSisalto(), i.getSisalto());
     }
-    
+
     @Test
     public void testComment() throws Exception {
         String kayttaja = "taavetti99";
         String teksti = UUID.randomUUID().toString();
         Kuva kuva = kuvaService.haeKaikki().get(0);
-        
+
         mockMvc.perform(post("/pic/" + kuva.getId())
                 .with(user(kayttaja).password("taavetti99"))
                 .with(csrf())
                 .param("kommentti", teksti))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pic/" + kuva.getId()));
-        
+
         MvcResult res = mockMvc.perform(get("/pic/" + kuva.getId())
                 .with(user(kayttaja).password("taavetti99")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("kuva"))
                 .andReturn();
-        
+
         Kuva i = (Kuva) res.getModelAndView().getModel().get("kuva");
-        
+
         boolean t = false;
-        
+
         for (Kommentti kommentti : i.getKommentit()) {
             if (kommentti.getSisalto().equals(teksti) && kommentti.getKayttaja().getKayttajanimi().equals(kayttaja)) {
                 t = true;
             }
         }
-        
+
         assertTrue(t);
     }
-    
+
     @Test
     public void testAddImage() throws Exception {
         MockMultipartFile multipartFile = new MockMultipartFile("kuva", "aarrggghh.png", "image/png", "aarrggghh".getBytes());
@@ -213,15 +211,17 @@ public class InstaApplicationTest {
                 .param("tunnisteet", tunnisteet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
-        
+
         boolean t = false;
-        
+
         for (Kuva kuva : kuvaService.haeKaikki()) {
-            if (Arrays.equals(kuva.getSisalto(), multipartFile.getBytes()) && kuva.getKayttaja().getKayttajanimi().equals(kayttaja)) {
+            if (Arrays.equals(kuva.getSisalto(), multipartFile.getBytes())
+                    && kuva.getKayttaja().getKayttajanimi().equals(kayttaja)
+                    && kuva.getKuvateksti().equals(kuvateksti)) {
                 t = true;
             }
         }
-        
+
         assertTrue(t);
     }
 }

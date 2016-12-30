@@ -12,8 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,8 +99,8 @@ public class KuvaService {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(thumb, "png", out);
             return out.toByteArray();
-        } catch (Exception ex) {
-            return sisalto; // ei kovin siisti ratkaisu, mutta helpottaa testausta...
+        } catch (Exception ex) { // ei kovin siisti ratkaisu, mutta helpottaa testausta...
+            return sisalto;
         }
     }
     
