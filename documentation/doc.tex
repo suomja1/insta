@@ -28,14 +28,14 @@
 \addtolength{\footskip}{-22pt}
 
 \begin{document}
-Janne Suomalainen\\\textsf{insta} (0.9)\\Web"-palvelinohjelmointi Java "=kurssin harjoitustyö\\\today
+Janne Suomalainen\\\textsf{insta} (0.9.1)\\Web"-palvelinohjelmointi Java "=kurssin harjoitustyö\\\today
 
 \section{Sovellus}
-Sovellus löytyy osoitteesta \url{https://evening-island-18993.herokuapp.com}. Sovelluksen lähdekoodi löytyy \href{https://github.com/suomja1/insta}{GitHubista} ja sen testaus (versiossa 0.9 ei ole implementoitu yhtään testiä) on automatisoitu \href{https://travis-ci.org/suomja1/insta}{Travis-palvelun} avulla.
+Sovellus löytyy osoitteesta \url{https://evening-island-18993.herokuapp.com}. Sovelluksen lähdekoodi löytyy \href{https://github.com/suomja1/insta}{GitHubista} ja sen testaus on automatisoitu \href{https://travis-ci.org/suomja1/insta}{Travis-palvelun} avulla.
 
 \textsf{insta} on pelkistetty kuvapalvelu (vertaa \href{https://www.instagram.com}{Instagram}), jossa käyttäjä pystyy lisäämään, selaamaan sekä kommentoimaan kuvia. Kuvien selaamisen helpottamiseksi kuviin voi lisätä erilaisia tunnisteita (vertaa \emph{hashtag}).
 
-Erilliset tuotanto- ja testausprofiilit sujuvoittavat sovelluksen kehittämistä. \textsf{insta}ssa profiilit on toteutettu erillisillä konfiguraatiotiedostoilla. Käytettävä profiili valitaan sovelluksen main"-luokassa SpringApplication"-luokan setAdditionalProfiles"-metodilla.
+Erilliset tuotanto- ja testausprofiilit sujuvoittavat sovelluksen kehittämistä. \textsf{insta}ssa profiilit on toteutettu erillisillä konfiguraatiotiedostoilla. Käytettävä profiili valikoituu automaattisesti tuotantoprofiiliksi (prod) sovelluksen siirtyessä Heroku-palveluun.
 
 \begin{wrapfigure}[15]{r}{.5\linewidth-.5\columnsep}
 \vspace*{-\intextsep}
@@ -50,7 +50,7 @@ Uusi käyttäjä pystyy luomaan tunnuksen sovelluksen kirjautumissivulla syött�
 
 Käyttäjä pystyy kirjautumaan sovellukseen syöttämällä Kirjaudu sisään "=otsakkeen alla oleviin kenttiin käyttäjänimen ja salasanan. Kirjautumisen epäonnistuessa annetaan selkokielinen virheviesti. Sisäänkirjauduttuaan käyttäjä pystyy kirjautumaan ulos sivun oikeassa ylälaidassa olevasta Kirjaudu ulos "=painikkeesta.
 
-Uuden kuvan lisääminen käy kotisivun alareunassa olevalla lomakkeella. Lomakkeella valitaan kuvatiedosto, kuvan kuvateksti ja tunnisteet. Jälkimmäiset näistä ovat vapaaehtoisia. Kuvatiedostolla on kokorajoitus. Tunnisteet syötetään pilkuin erotettuna listana. Latauksen onnistuessa kuva piennennetään ja lisätään tietokantaan mahdollisine kuvateksteineen ja tunnisteineen.
+Uuden kuvan lisääminen käy kotisivun alareunassa olevalla lomakkeella. Lomakkeella valitaan kuvatiedosto, kuvan kuvateksti ja tunnisteet. Jälkimmäiset näistä ovat vapaaehtoisia. Kuvatiedostolla on kokorajoitus. Tunnisteet syötetään pilkuin erotettuna listana. Latauksen onnistuessa kuva piennennetään (jos mahdollista) ja lisätään tietokantaan mahdollisine kuvateksteineen ja tunnisteineen.
 
 Käyttäjä pystyy selaamaan kuvia kolmella eri tavalla: käyttäjittäin, tunnisteittain ja yksittäin. Käyttäjä- ja tunnistekohtaisilla sivuilla kuvista kerrotaan käyttäjän tai tunnisteen lisäksi kuvan kuvateksti, kuvan lisääjä ja kommenttien lukumäärä. Kuvakohtaisella sivulla listataan kaikki kuvan tunnisteet ja kommentit.
 
@@ -59,9 +59,9 @@ Kuvan kommentointi tapahtuu kuvakohtaisen sivun alareunassa olevalla lomakkeella
 Sovelluksessa navigointi tapahtuu sivuilla olevien linkkien avulla.																																																																																																																																																																																																																																																																																																																																																																																																																				
 
 \section{Jatkokehitys}
-Ensimmäisenä versiona solvelluksessa on vielä paljon kehitettävää. Ehkä kriittisimpänä sovellukselle pitää vielä kirjoittaa kattavat yksikkö-, integraatio- ja järjestelmätestit.
+Ensimmäisenä versiona solvelluksessa on vielä paljon kehitettävää. Sovellukselle on kirjoitettu rivikattavuudeltaan kattavat (Cobertura) järjestelmätestit keskeisille käyttötapauksille.
 
-Sovelluksen käyttöliittymään, ulkonäköön ei ole kiinnitetty vielä tarpeeksi huomiota. Tähän liittyvät mahdollisten virheviestien selkokieleistäminen ja syötteiden ohjeistaminen. Lisäksi taulukkorakenteiden käyttö sivujen rakentamisessa lienee vanhanaikaista. Sivua ei löydy "=virheen tavoin myös muut virheviestit pitää luoda. Käytettävyyttä lisäisi myös palvelinpuolen välimuisti, mikä vaihdittaisi kuvien lataamista.
+Sovelluksen käyttöliittymään, ulkonäköön ei ole kiinnitetty vielä tarpeeksi huomiota. Tähän liittyvät mahdollisten virheviestien selkokieleistäminen ja syötteiden ohjeistaminen. Lisäksi taulukkorakenteiden käyttö sivujen rakentamisessa lienee vanhanaikaista. Sivua ei löydy "=virheen tavoin myös muut virheviestit pitää luoda. Käytettävyyttä lisäisi myös palvelinpuolen välimuisti, mikä vaihdittaisi kuvien lataamista, sekä metodikutsujen rinnakkaisuus.
 
 Paikoin syötteiden validiointi on vajavaista. Yritettäessä luoda uutta käyttäjää, jolla on sama käyttäjänimi jo olemassa olevan käyttäjän kanssa, antaa sovellus automaattisen virheviestin (500). Tämä ei ole kaunista luettavaa. Käyttäjänimen uniikkius tulisi validoida ennen yritystä kirjoittaa tietokantaan. Lisäksi sovellus ei ilmoita käyttäjälle, vaikka käyttäjän luominen onnistuu. Puolestaan Lisää kuva -lomaketta ei ole validoitu laisinkaan. Kuvateksti- ja tunniste-kenttien kohdalla tämä ei ole välttämätöntä, mutta tiedostotyypin ja "=koon tarkastaminen olisi oleellista.
 
